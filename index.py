@@ -6,9 +6,11 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # 替換為你自己的密鑰
 
 # 資料檔案路徑
-STUDENTS_FILE = "data/students.json"
-VOTES_FILE = "data/votes.json"
-GROUPS_FILE = "data/groups.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STUDENTS_FILE = os.path.join(BASE_DIR, "data", "students.json")
+VOTES_FILE = os.path.join(BASE_DIR, "data", "votes.json")
+GROUPS_FILE = os.path.join(BASE_DIR, "data", "groups.json")
 
 
 # 載入學生資料
