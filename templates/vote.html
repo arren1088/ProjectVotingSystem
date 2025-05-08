@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>專題投票系統</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='vote.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="../static/js/submit.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>專題投票系統</h1>
+    <div class="voting-layout">
+      <!-- 左邊按鈕區 -->
+      <div class="button-panel">
+        <div class="button-grid">
+          {% for group in groups %}
+            <button class="show-details-btn" data-id="{{ group.id }}" aria-label="顯示組別 {{ group.id }} 詳情">{{ group.id }}</button>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- 中間分隔線 -->
+      <div class="divider"></div>
+      <!-- 右邊細節區 -->
+      <div class="detail-panel">
+        {% for group in groups %}
+        <div id="detail-{{ group.id }}" class="detail" style="display:none;">
+          <p>組別名稱：{{ group.name }}</p>
+          <p>指導老師：{{ group.teacher }}</p>
+          <p>實驗室號碼：{{ group.lab_number }}</p>
+          <button class="vote-btn" data-id="{{ group.id }}">投票</button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+<button id="confirmButton" onclick="confirmVote()">確認投票</button>
+</div>
+
+<script>
+  const userVotes = {{ session.get("votes", []) | tojson }};
+</script>
+  <script src="{{ url_for('static', filename='js/detail.js') }}"></script>
+</body>
+</html>
