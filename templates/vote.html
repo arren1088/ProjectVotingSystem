@@ -11,8 +11,9 @@
 <body>
   <div class="container">
     <h1>專題投票系統</h1>
+    <p>投出你心目中的前三名，讓他們獲得最佳人氣獎</p>
+    <p>請投票三個組別 確認後按下確認送出</p>
     <div class="voting-layout">
-      <!-- 左邊按鈕區 -->
       <div class="button-panel">
         <div class="button-grid">
           {% for group in groups %}
@@ -26,7 +27,7 @@
       <div class="detail-panel">
         {% for group in groups %}
         <div id="detail-{{ group.id }}" class="detail" style="display:none;">
-          <p>組別名稱：{{ group.name }}</p>
+          <p>題目：{{ group.name }}</p>
           <p>指導老師：{{ group.teacher }}</p>
           <p>實驗室號碼：{{ group.lab_number }}</p>
           <button class="vote-btn" data-id="{{ group.id }}">投票</button>
@@ -34,7 +35,7 @@
         {% endfor %}
       </div>
     </div>
-<button id="confirmButton" onclick="confirmVote()">確認投票</button>
+<button id="confirmButton" onclick="confirmVote()">確認送出</button>
 </div>
 
 <script>

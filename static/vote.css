@@ -29,7 +29,17 @@ body {
 /* 標題 */
 h1 {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 微調陰影，適應淺藍背景 */
+  margin: 2rem 0;
+  letter-spacing: 1.5px;
+}
+
+p {
+  text-align: center;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #1A1A2E;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 微調陰影，適應淺藍背景 */

@@ -84,7 +84,7 @@ def submit():
 
     # 檢查學號是否已存在
     if student_id in students:
-        return render_template("index.html", message="學號已投票，不得重複投票。")
+        return render_template("index.html", message="此學號已投票，不得重複投票。")
 
     # 如果學生已存在且已投超過三票就導向成功頁
     if student_id in students and len(students[student_id]["votes"]) >= 3:
@@ -198,8 +198,6 @@ def toggle_vote():
     session["votes"] = votes
 
     return jsonify({"success": True, "message": message, "voted": voted, "vote_count": len(votes)})
-
-
 
 @app.route("/succeed")
 def succeed():
