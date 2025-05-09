@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理頁面</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>管理頁面</h1>
+        <h2>學生投票記錄</h2>
+
+        <!-- 顯示每位學生的投票紀錄 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>學號</th>
+                    <th>姓名</th>
+                    <th>投票紀錄</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student_id, student in students.items() %}
+                    <tr>
+                        <td>{{ student_id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>
+                            {% if student.votes %}
+                                <ul>
+                                    {% for vote in student.votes %}
+                                        <li>組別: {{ vote.group_id }} | 投票時間: {{ vote.vote_time }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span>尚未投票</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>各組投票統計</h2>
+        <!-- 顯示每組的投票總數 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>組別</th>
+                    <th>投票數</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group_id, vote_count in vote_counts %}
+                    <tr>
+                        <td>{{ group_id }}</td>
+                        <td>{{ vote_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

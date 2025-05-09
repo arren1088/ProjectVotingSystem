@@ -1,0 +1,109 @@
+/* 全局設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 背景與色彩 */
+body {
+  background: linear-gradient(135deg, #f9f9f9, #e3e3e3);
+  color: #333;
+  font-size: 16px;
+  line-height: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  animation: gradientMotion 5s ease-in-out infinite; /* 保持背景漸變過渡 */
+}
+
+/* 容器設置 */
+.container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  transform: translateY(30px);
+  animation-delay: 0.5s;
+}
+
+/* 標題設計 */
+h1 {
+  font-size: 2.5rem;
+  color: #4CAF50;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  animation: textBounce 1s ease-out infinite alternate;
+}
+
+/* 文字段落 */
+p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.8;
+  opacity: 0;
+  animation: fadeInText 1.5s ease-out forwards;
+  animation-delay: 1s;
+}
+
+/* 整體視覺設置：過渡效果 */
+.container:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  transition: all 0.3s ease-in-out;
+}
+
+/* 標題跳動動畫 */
+@keyframes textBounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 顯示動畫 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1rem;
+  }
+  .container {
+    padding: 20px;
+  }
+}

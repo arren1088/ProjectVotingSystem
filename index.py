@@ -1,67 +1,73 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-import json
 import os
+import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # 替換為你自己的密鑰
+app.secret_key = 'your_secret_key_here'
 
-# 資料檔案路徑
+# 資料庫路徑
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-STUDENTS_FILE = os.path.join(BASE_DIR, "data", "students.json")
-VOTES_FILE = os.path.join(BASE_DIR, "data", "votes.json")
+DB_PATH = os.path.join(BASE_DIR, "data", "database.db")
 GROUPS_FILE = os.path.join(BASE_DIR, "data", "groups.json")
 
 
-# 載入學生資料
-def load_students():
-    if os.path.exists(STUDENTS_FILE):
-        with open(STUDENTS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+# 初始化資料庫
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute('''
+              CREATE TABLE IF NOT EXISTS students
+              (
+                  student_id
+                  TEXT
+                  PRIMARY
+                  KEY,
+                  student_name
+                  TEXT
+                  NOT
+                  NULL,
+                  has_voted
+                  INTEGER
+                  DEFAULT
+                  0
+              )
+              ''')
+    c.execute('''
+              CREATE TABLE IF NOT EXISTS votes
+              (
+                  student_id
+                  TEXT,
+                  group_id
+                  TEXT,
+                  vote_time
+                  TEXT, -- 新增這一欄位來記錄投票時間
+                  PRIMARY
+                  KEY
+              (
+                  student_id,
+                  group_id
+              )
+                  )
+              ''')
+    conn.commit()
+    conn.close()
 
 
-# 儲存學生資料
-def save_student(student_id, student_name):
-    students = load_students()
-
-    # 儲存學生資料，結構是 {student_id: {"name": student_name, "votes": []}}
-    students[student_id] = {"name": student_name, "votes": []}
-
-    # 儲存回 JSON 檔案
-    with open(STUDENTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(students, f, ensure_ascii=False, indent=2)
+init_db()
 
 
-# 儲存學生投票
-def save_student_votes(student_id, votes):
-    students = load_students()
-
-    # 更新學生投票資料
-    if student_id in students:
-        students[student_id]["votes"] = votes
-    else:
-        students[student_id] = {"votes": votes}
-
-    # 儲存回 JSON 檔案
-    with open(STUDENTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(students, f, ensure_ascii=False, indent=2)
+def get_votes_by_student(student_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT group_id, vote_time FROM votes WHERE student_id = ?", (student_id,))
+    votes = [{"group_id": row[0], "vote_time": row[1]} for row in c.fetchall()]
+    conn.close()
+    return votes
 
 
-# 儲存票數
-def save_vote(group_id):
-    if not os.path.exists(VOTES_FILE):
-        votes = {}
-    else:
-        with open(VOTES_FILE, "r", encoding="utf-8") as f:
-            votes = json.load(f)
-    votes[group_id] = votes.get(group_id, 0) + 1
-    with open(VOTES_FILE, "w", encoding="utf-8") as f:
-        json.dump(votes, f, ensure_ascii=False, indent=2)
-
-
-# 載入組別資料
 def load_groups():
+    import json
     if os.path.exists(GROUPS_FILE):
         with open(GROUPS_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -78,26 +84,29 @@ def submit():
     student_id = request.form["student_id"]
     student_name = request.form["student_name"]
 
-    # 檢查學號長度是否為9碼
     if len(student_id) != 9 or not student_id.isdigit():
         return render_template("index.html", message="請輸入正確學號。")
 
-    students = load_students()
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT has_voted FROM students WHERE student_id = ?", (student_id,))
+    row = c.fetchone()
 
-    # 檢查學號是否已存在
-    if student_id in students:
-        return render_template("index.html", message="此學號已投票，不得重複投票。")
+    if row:
+        if row[0] == 1:
+            return render_template("index.html", message="此學號已投票，不得重複投票。")
+        else:
+            # 尚未完成投票，直接讓他重新登入投票
+            session["student_id"] = student_id
+            session["votes"] = get_votes_by_student(student_id)
+            return redirect(url_for("vote_page"))
 
-    # 如果學生已存在且已投超過三票就導向成功頁
-    if student_id in students and len(students[student_id]["votes"]) >= 3:
-        return redirect(url_for("succeed"))
+    c.execute("INSERT INTO students (student_id, student_name) VALUES (?, ?)", (student_id, student_name))
+    conn.commit()
+    conn.close()
 
-    # 儲存學號和姓名到 JSON 檔案
-    save_student(student_id, student_name)
-
-    # 儲存學號到 session
     session["student_id"] = student_id
-    session["votes"] = students.get(student_id, {}).get("votes", [])
+    session["votes"] = []
 
     return redirect(url_for("vote_page"))
 
@@ -108,12 +117,13 @@ def vote_page():
     if not student_id:
         return redirect(url_for("index"))
 
-    if len(session.get("votes", [])) >= 3:
+    votes = get_votes_by_student(student_id)
+    if len(votes) >= 3:
         return redirect(url_for("succeed"))
 
     groups = load_groups()
+    session["votes"] = votes
     return render_template("vote.html", groups=groups)
-
 
 
 @app.route("/api/vote", methods=["POST"])
@@ -128,16 +138,23 @@ def vote():
     if not group_id:
         return jsonify({"success": False, "message": "缺少組別 ID"}), 400
 
-    students = load_students()
-    votes = students.get(student_id, {}).get("votes", [])
-
-    if group_id in votes:
+    votes = get_votes_by_student(student_id)
+    if group_id in [v["group_id"] for v in votes]:
         return jsonify({"success": False, "message": "您已經投過此組別！"}), 403
     if len(votes) >= 3:
         return jsonify({"success": False, "message": "您已經投過三票了！"}), 403
 
-    votes.append(group_id)
-    save_student_votes(student_id, votes)
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+
+    # 取得當前時間
+    vote_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    c.execute("INSERT INTO votes (student_id, group_id, vote_time) VALUES (?, ?, ?)", (student_id, group_id, vote_time))
+    conn.commit()
+    conn.close()
+
+    votes.append({"group_id": group_id, "vote_time": vote_time})
     session["votes"] = votes
 
     return jsonify({"success": True})
@@ -149,25 +166,17 @@ def confirm_vote():
         return jsonify({"success": False, "message": "尚未完成投票"}), 400
 
     student_id = session["student_id"]
-    votes = session["votes"]
 
-    # 更新 votes.json 統計每一組的票數
-    if os.path.exists(VOTES_FILE):
-        with open(VOTES_FILE, "r", encoding="utf-8") as f:
-            vote_counts = json.load(f)
-    else:
-        vote_counts = {}
+    # 更新 has_voted 為 1，表示此學生已完成投票
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("UPDATE students SET has_voted = 1 WHERE student_id = ?", (student_id,))
+    conn.commit()
+    conn.close()
 
-    for group_id in votes:
-        vote_counts[group_id] = vote_counts.get(group_id, 0) + 1
-
-    with open(VOTES_FILE, "w", encoding="utf-8") as f:
-        json.dump(vote_counts, f, ensure_ascii=False, indent=2)
-
-    # 清除 session 中的票數（防止重複送出）
     session.pop("votes", None)
-
     return jsonify({"success": True})
+
 
 @app.route("/api/toggle_vote", methods=["POST"])
 def toggle_vote():
@@ -177,33 +186,66 @@ def toggle_vote():
     student_id = session["student_id"]
     data = request.get_json()
     group_id = data.get("group_id")
+
     if not group_id:
         return jsonify({"success": False, "message": "缺少組別 ID"}), 400
 
-    students = load_students()
-    votes = students.get(student_id, {}).get("votes", [])
+    votes = get_votes_by_student(student_id)
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
 
-    if group_id in votes:
-        # 取消投票
-        votes.remove(group_id)
+    if group_id in [v["group_id"] for v in votes]:
+        c.execute("DELETE FROM votes WHERE student_id = ? AND group_id = ?", (student_id, group_id))
         message = "已取消投票"
         voted = False
     else:
         if len(votes) >= 3:
+            conn.close()
             return jsonify({"success": False, "message": "最多只能投三票"}), 403
-        votes.append(group_id)
+
+        # 取得當前時間
+        vote_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        c.execute("INSERT INTO votes (student_id, group_id, vote_time) VALUES (?, ?, ?)",
+                  (student_id, group_id, vote_time))
         message = "投票成功"
         voted = True
 
-    # 存回
-    save_student_votes(student_id, votes)
-    session["votes"] = votes
+    conn.commit()
+    conn.close()
 
-    return jsonify({"success": True, "message": message, "voted": voted, "vote_count": len(votes)})
+    session["votes"] = get_votes_by_student(student_id)
+
+    return jsonify({"success": True, "message": message, "voted": voted, "vote_count": len(session['votes'])})
+
 
 @app.route("/succeed")
 def succeed():
     return render_template("succeed.html")
+
+
+@app.route("/admin")
+def admin():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+
+    # 所有學生及他們的投票
+    c.execute("SELECT student_id, student_name FROM students")
+    students_raw = c.fetchall()
+
+    student_votes = {}
+    for student_id, name in students_raw:
+        c.execute("SELECT group_id, vote_time FROM votes WHERE student_id = ?", (student_id,))
+        group_votes = [{"group_id": row[0], "vote_time": row[1]} for row in c.fetchall()]
+        student_votes[student_id] = {"name": name, "votes": group_votes}
+
+    # 每組的投票總數
+    c.execute("SELECT group_id, COUNT(*) FROM votes GROUP BY group_id")
+    vote_counts = c.fetchall()
+
+    conn.close()
+
+    return render_template("admin.html", students=student_votes, vote_counts=vote_counts)
 
 
 if __name__ == "__main__":
