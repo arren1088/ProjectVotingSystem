@@ -79,7 +79,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // 顯示當前選擇的
     detailDiv.style.display = 'flex';
     const currentBtn = document.querySelector(`.show-details-btn[data-id="${groupId}"]`);
-    if (currentBtn) currentBtn.classList.add('active');
+    if (currentBtn) {
+      currentBtn.classList.add('active');
+    }
+
+    // 在手機版中，顯示詳細資訊
+    if (window.innerWidth <= 768) {
+      detailDiv.classList.add('expand');
+    }
   }
 
   // 點擊確認後跳轉到成功頁面

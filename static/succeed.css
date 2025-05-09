@@ -17,18 +17,18 @@ body {
   align-items: center;
   height: 100vh;
   overflow: hidden;
-  animation: gradientMotion 5s ease-in-out infinite; /* 保持背景漸變過渡 */
+  animation: gradientMotion 5s ease-in-out infinite;
 }
 
 /* 容器設置 */
 .container {
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  border-radius: 16px; /* 增大圓角 */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* 更深的陰影效果 */
+  padding: 60px; /* 增加內邊距 */
   text-align: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px; /* 增大最大寬度 */
   opacity: 0;
   animation: fadeIn 1s ease-out forwards;
   transform: translateY(30px);
@@ -37,19 +37,19 @@ body {
 
 /* 標題設計 */
 h1 {
-  font-size: 2.5rem;
+  font-size: 3.5rem; /* 更大標題 */
   color: #4CAF50;
-  margin-bottom: 20px;
-  font-weight: 700;
+  margin-bottom: 30px; /* 增大標題下方間距 */
+  font-weight: 800; /* 更粗的字型 */
   text-transform: uppercase;
   animation: textBounce 1s ease-out infinite alternate;
 }
 
 /* 文字段落 */
 p {
-  font-size: 1.2rem;
+  font-size: 1.6rem; /* 增大段落字型 */
   color: #555;
-  margin-bottom: 30px;
+  margin-bottom: 40px; /* 增大段落下方間距 */
   line-height: 1.8;
   opacity: 0;
   animation: fadeInText 1.5s ease-out forwards;
@@ -58,7 +58,7 @@ p {
 
 /* 整體視覺設置：過渡效果 */
 .container:hover {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3); /* 增加陰影深度 */
   transform: translateY(-5px);
   transition: all 0.3s ease-in-out;
 }
@@ -69,7 +69,7 @@ p {
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-10px);
+    transform: translateY(-15px); /* 讓跳動效果更大 */
   }
 }
 
@@ -94,16 +94,52 @@ p {
   }
 }
 
-
 /* 響應式設計 */
 @media (max-width: 768px) {
   h1 {
-    font-size: 2rem;
+    font-size: 7.5rem; /* 增大標題 */
   }
   p {
-    font-size: 1rem;
+    font-size: 6rem; /* 增大段落字型 */
   }
   .container {
-    padding: 20px;
+    padding: 40px;
+    max-width: 85%; /* 擴大容器寬度 */
   }
+}
+
+/* 針對 iPhone 14、15、16 設定 */
+@media (max-width: 430px) { /* iPhone 14, 15, 16 的寬度約為 430px */
+  h1 {
+    font-size: 7.5rem; /* 超大標題 */
+  }
+  p {
+    font-size: 6rem; /* 超大段落字型 */
+  }
+  .container {
+    padding: 40px;
+    max-width: 90%; /* 擴大容器寬度 */
+  }
+}
+
+/* 針對 iPhone SE 2 (375px 寬度) 設定 */
+@media (max-width: 375px) {
+  h1 {
+    font-size: 6.5rem; /* 超大標題 */
+  }
+  p {
+    font-size: 5.5rem; /* 超大段落字型 */
+  }
+  .container {
+    padding: 30px;
+    max-width: 90%; /* 擴大容器寬度 */
+  }
+}
+
+/* 確保容器在螢幕中央 */
+html, body {
+  height: 100%; /* 確保 html 和 body 的高度填滿視窗 */
+  display: flex; /* 使用 flex 排版 */
+  justify-content: center; /* 水平置中 */
+  align-items: center; /* 垂直置中 */
 }

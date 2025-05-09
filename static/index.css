@@ -24,8 +24,8 @@ body {
   max-width: 420px;
   width: 100%;
   text-align: center;
-  animation: slideIn 1s ease-out forwards; /* forwards 保持動畫結束後的狀態 */
-  transform: translateY(0); /* 確保動畫結束後位置不會變動 */
+  animation: slideIn 1s ease-out forwards;
+  transform: translateY(0);
 }
 
 h1 {
@@ -35,7 +35,7 @@ h1 {
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
-  animation: fadeInText 1.2s ease-out forwards; /* forwards 確保動畫結束後的位置保持 */
+  animation: fadeInText 1.2s ease-out forwards;
 }
 
 form {
@@ -115,5 +115,39 @@ p {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* 手機自適應設計 */
+@media (max-width: 480px) {
+  .container {
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 1rem;
+  }
+
+  input[type="text"] {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+
+  button {
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 40px;
+  }
+
+  p {
+    font-size: 0.85rem;
   }
 }
