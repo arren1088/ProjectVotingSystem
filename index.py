@@ -138,6 +138,8 @@ def vote():
     if not group_id:
         return jsonify({"success": False, "message": "缺少組別 ID"}), 400
 
+    print(f"接收到的資料: {data}")  # 用來檢查接收到的資料
+
     votes = get_votes_by_student(student_id)
     if group_id in [v["group_id"] for v in votes]:
         return jsonify({"success": False, "message": "您已經投過此組別！"}), 403
