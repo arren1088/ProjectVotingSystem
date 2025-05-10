@@ -100,6 +100,32 @@ ul li {
   padding: 5px 0;
 }
 
+/* 下載按鈕設計 */
+.download-buttons {
+  margin-top: 30px;
+  text-align: center;
+}
+
+button {
+  background-color: #4CAF50; /* 按鈕背景顏色 */
+  color: white; /* 按鈕文字顏色 */
+  border: none; /* 去掉邊框 */
+  padding: 10px 20px; /* 內邊距 */
+  font-size: 1rem; /* 字體大小 */
+  cursor: pointer; /* 鼠標懸停時變為手形 */
+  border-radius: 5px; /* 圓角設計 */
+  transition: background-color 0.3s ease; /* 背景顏色過渡 */
+  margin: 10px 0; /* 上下邊距 */
+}
+
+button:hover {
+  background-color: #45a049; /* 滑鼠懸停時背景顏色 */
+}
+
+button:focus {
+  outline: none; /* 去除聚焦樣式 */
+}
+
 /* 響應式設計 */
 @media (max-width: 768px) {
   body {

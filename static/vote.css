@@ -32,7 +32,7 @@ h1 {
   font-size: 2.8rem;
   font-weight: 700;
   color: #1A1A2E;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 微調陰影，適應淺藍背景 */
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   margin: 2rem 0;
   letter-spacing: 1.5px;
 }
@@ -42,7 +42,7 @@ p {
   font-size: 1.4rem;
   font-weight: 700;
   color: #1A1A2E;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 微調陰影，適應淺藍背景 */
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   margin: 2rem 0;
   letter-spacing: 1.5px;
 }
@@ -52,15 +52,14 @@ p {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 2rem;
   width: 100%;
   min-height: 700px;
 }
 
 /* 按鈕面板 */
 .button-panel {
-  flex: 0 0 60%;
-  padding: 2.5rem;
+  flex: 1; /* 佔據全部可用空間 */
+  padding: 1.5rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
@@ -72,7 +71,7 @@ p {
 /* 按鈕網格 */
 .button-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 4 個一排 */
+  grid-template-columns: repeat(6, 1fr);
   gap: 1.5rem;
 }
 
@@ -110,46 +109,6 @@ p {
   transform: scale(1.05);
 }
 
-/* 細節面板 */
-.detail-panel {
-  flex: 0 0 auto;
-  max-width: 600px;
-  min-width: 300px;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-/* 細節 */
-.detail {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  width: 100%;
-  animation: slideIn 0.6s ease-out;
-}
-
-.detail.expand {
-  display: flex;
-}
-
-.detail p {
-  width: 100%;
-  margin: 0.5rem 0;
-  font-size: 1.3rem;
-  color: #1A1A2E;
-  font-weight: 500;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
-  padding: 0.5rem;
-  border-radius: 8px;
-}
-
 /* 投票按鈕 */
 .vote-btn {
   background: linear-gradient(135deg, #facc15, #f97316);
@@ -180,102 +139,11 @@ p {
 
 /* 按鈕反白效果 */
 .vote-btn:disabled {
-  background-color: #ccc; /* 禁用時顯示灰色 */
-  cursor: not-allowed;    /* 禁用時變為不可點擊狀態 */
-}
-
-/* 確認按鈕 */
-#confirmButton {
-  background-color: #008CBA; /* 確認按鈕的背景色 */
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  font-size: 16px;
-  margin: 20px auto;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-}
-
-#confirmButton:disabled {
-  background-color: #ccc; /* 禁用狀態下的確認按鈕 */
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
-/* 動畫 */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 響應式設計 */
-@media (max-width: 768px) {
-  h1 { font-size: 2.5rem; }
-  .container { width: 95%; padding: 1.5rem; }
-  .voting-layout {
-    flex-direction: column;
-    gap: 1.5rem;
-    min-height: auto;
-  }
-  .button-panel {
-    flex: 0 0 100%;
-    width: 100%;
-    padding: 1.5rem;
-  }
-  .button-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  .show-details-btn {
-    padding: 0.8rem 1.2rem;
-    font-size: 1.1rem;
-  }
-  .detail-panel {
-    width: 100%;
-    max-width: 500px;
-    min-width: 250px;
-    padding: 1.5rem;
-  }
-  .detail {
-    gap: 1rem;
-  }
-  .detail p {
-    font-size: 1.1rem;
-  }
-  .vote-btn {
-    min-width: 140px;
-    padding: 0.8rem 2rem;
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 { font-size: 2rem; }
-  .container { padding: 1rem; }
-  .button-grid {
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
-  }
-  .show-details-btn {
-    padding: 0.7rem 1rem;
-    font-size: 1rem;
-  }
-  .detail p {
-    font-size: 1rem;
-  }
-  .vote-btn {
-    min-width: 120px;
-    padding: 0.7rem 1.5rem;
-    font-size: 1rem;
-  }
-}
-
-/* 確認投票按鈕 */
+/* 確認按鈕 */
 #confirmButton {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #ffffff;
@@ -283,7 +151,7 @@ p {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 600;
-  margin: -8rem auto 4rem auto;
+  margin: 4rem auto; /* 移除負邊距，確保按鈕在下方 */
   cursor: pointer;
   border: none;
   border-radius: 14px;
@@ -311,4 +179,56 @@ p {
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+
+/* 動畫 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  .container { width: 95%; padding: 1.5rem; }
+  .voting-layout {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .button-panel {
+    flex: 1;
+    width: 100%;
+    padding: 1.5rem;
+  }
+  .button-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .show-details-btn {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.1rem;
+  }
+  .vote-btn {
+    min-width: 140px;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem; }
+  .button-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  .show-details-btn {
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+  }
+  .vote-btn {
+    min-width: 120px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
 }

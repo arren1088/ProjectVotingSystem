@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理頁面</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
 </head>
 <body>
     <div class="container">
@@ -46,19 +46,36 @@
         <table>
             <thead>
                 <tr>
-                    <th>組別</th>
+                    <th>組別 ID</th>
+                    <th>組別名稱</th>
                     <th>投票數</th>
                 </tr>
             </thead>
             <tbody>
-                {% for group_id, vote_count in vote_counts %}
+                {% for vote in vote_counts %}
                     <tr>
-                        <td>{{ group_id }}</td>
-                        <td>{{ vote_count }}</td>
+                        <td>{{ vote.group_id }}</td>
+                        <td>{{ vote.group_name }}</td>
+                        <td>{{ vote.vote_count }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <!-- 下載按鈕 -->
+        <div class="download-buttons">
+            <button id="downloadExcelBtn">下載各組投票紀錄</button>
+            <button id="download_student_votes">下載投票學生紀錄（Excel）</button>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('downloadExcelBtn').addEventListener('click', function () {
+            window.location.href = "/admin/download_votes";
+        });
+        document.getElementById('download_student_votes').addEventListener('click', function () {
+            window.location.href = "/admin/download_student_votes";
+        });
+    </script>
 </body>
 </html>

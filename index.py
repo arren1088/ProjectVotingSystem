@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
 import os
+import io
 import sqlite3
+import pandas as pd
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -164,20 +167,47 @@ def vote():
 
 @app.route("/api/vote/confirm", methods=["POST"])
 def confirm_vote():
-    if "student_id" not in session or "votes" not in session:
-        return jsonify({"success": False, "message": "尚未完成投票"}), 400
+    if "student_id" not in session:
+        return jsonify(success=False, message="請先登入"), 403
+
+    data = request.get_json()
+    selected_votes = data.get("selected_votes", [])
+
+    if len(selected_votes) != 3:
+        return jsonify(success=False, message="必須選擇三組"), 400
 
     student_id = session["student_id"]
 
-    # 更新 has_voted 為 1，表示此學生已完成投票
     conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("UPDATE students SET has_voted = 1 WHERE student_id = ?", (student_id,))
-    conn.commit()
-    conn.close()
+    cursor = conn.cursor()
 
-    session.pop("votes", None)
-    return jsonify({"success": True})
+    try:
+        # 檢查是否已經投過票
+        cursor.execute("SELECT COUNT(*) FROM votes WHERE student_id = ?", (student_id,))
+        if cursor.fetchone()[0] > 0:
+            return jsonify(success=False, message="你已經投過票了"), 400
+
+        # 寫入三筆投票
+        vote_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        for group_id in selected_votes:
+            cursor.execute(
+                "INSERT INTO votes (student_id, group_id, vote_time) VALUES (?, ?, ?)",
+                (student_id, group_id, vote_time)
+            )
+
+        # 更新 has_voted 欄位
+        cursor.execute("UPDATE students SET has_voted = 1 WHERE student_id = ?", (student_id,))
+
+        conn.commit()
+        return jsonify(success=True)
+
+    except Exception as e:
+        conn.rollback()
+        print("寫入投票時發生錯誤：", e)
+        return jsonify(success=False, message="寫入失敗")
+
+    finally:
+        conn.close()
 
 
 @app.route("/api/toggle_vote", methods=["POST"])
@@ -245,9 +275,107 @@ def admin():
     c.execute("SELECT group_id, COUNT(*) FROM votes GROUP BY group_id")
     vote_counts = c.fetchall()
 
+    # 讀取 groups.json 檔案
+    groups = load_groups()
+
+    # 將投票數和組別名稱結合
+    vote_counts_data = []
+    for group_id, count in vote_counts:
+        group_name = next((group['name'] for group in groups if group['id'] == group_id), '未知組別')
+        vote_counts_data.append({"group_id": group_id, "group_name": group_name, "vote_count": count})
+
+    # 按照投票數 (vote_count) 高到低排序
+    vote_counts_data = sorted(vote_counts_data, key=lambda x: x['vote_count'], reverse=True)
+
     conn.close()
 
-    return render_template("admin.html", students=student_votes, vote_counts=vote_counts)
+    return render_template("admin.html", students=student_votes, vote_counts=vote_counts_data)
+
+
+@app.route("/admin/download_votes")
+def download_votes():
+    # 讀取 groups.json 檔案
+    groups = load_groups()  # 這裡會讀取你存放組別資料的 JSON 檔案
+
+    # 轉換成字典，方便查找每個組別的名稱
+    group_dict = {group['id']: group['name'] for group in groups}
+
+    # 取得每個組別的投票總數
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    vote_counts_query = """
+        SELECT group_id, COUNT(*) as vote_count
+        FROM votes
+        GROUP BY group_id
+    """
+    vote_counts = pd.read_sql_query(vote_counts_query, conn)
+
+    # 將 group_id 轉換為 group_name
+    vote_counts['group_name'] = vote_counts['group_id'].map(lambda group_id: group_dict.get(group_id, '未知組別'))
+
+    # 重新排列欄位順序
+    vote_counts = vote_counts[['group_id', 'group_name', 'vote_count']]
+
+    # 按照投票數 (vote_count) 高到低排序
+    vote_counts = vote_counts.sort_values(by='vote_count', ascending=False)
+
+    conn.close()
+
+    # 匯出到 Excel
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        vote_counts.to_excel(writer, index=False, sheet_name='Votes')
+
+    output.seek(0)
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="vote_records.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+@app.route("/admin/download_student_votes")
+def download_student_votes():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # 讀取投票資料
+    query = """
+        SELECT s.student_id, s.student_name, v.group_id, v.vote_time
+        FROM votes v
+        JOIN students s ON v.student_id = s.student_id
+    """
+    df_votes = pd.read_sql_query(query, conn)
+
+    conn.close()
+
+    # 讀取 groups.json 檔案
+    with open('data/groups.json', 'r', encoding='utf-8') as f:
+        groups_data = json.load(f)
+
+    # 將 groups.json 轉為 DataFrame
+    df_groups = pd.DataFrame(groups_data)
+
+    # 合併投票資料與組別資料
+    df_result = pd.merge(df_votes, df_groups, left_on='group_id', right_on='id', how='left')
+
+    # 保留需要的欄位，並重新排列順序
+    df_result = df_result[['student_id', 'student_name', 'name', 'vote_time']]
+    df_result.rename(columns={'name': 'group_name'}, inplace=True)
+
+    # 匯出為 Excel
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df_result.to_excel(writer, index=False, sheet_name='Student_Votes')
+
+    output.seek(0)
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="student_vote_records.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 
 if __name__ == "__main__":
