@@ -9,40 +9,49 @@
 <body>
     <div class="container">
         <h1>管理頁面</h1>
-        <h2>學生投票記錄</h2>
+        {% if message %}
+            <p style="color: red; text-align: center;">{{ message }}</p>
+        {% endif %}
 
-        <!-- 顯示每位學生的投票紀錄 -->
+        <h2>學生投票記錄</h2>
         <table>
             <thead>
                 <tr>
                     <th>學號</th>
+                    <th>班級</th>
                     <th>姓名</th>
                     <th>投票紀錄</th>
                 </tr>
             </thead>
             <tbody>
-                {% for student_id, student in students.items() %}
+                {% if students %}
+                    {% for student_id, student in students.items() %}
+                        <tr>
+                            <td>{{ student_id }}</td>
+                            <td>{{ student.class }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>
+                                {% if student.votes %}
+                                    <ul>
+                                        {% for vote in student.votes %}
+                                            <li>組別: {{ vote.group_id }} | 投票時間: {{ vote.vote_time }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <span>尚未投票</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
                     <tr>
-                        <td>{{ student_id }}</td>
-                        <td>{{ student.name }}</td>
-                        <td>
-                            {% if student.votes %}
-                                <ul>
-                                    {% for vote in student.votes %}
-                                        <li>組別: {{ vote.group_id }} | 投票時間: {{ vote.vote_time }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% else %}
-                                <span>尚未投票</span>
-                            {% endif %}
-                        </td>
+                        <td colspan="4" style="text-align: center;">目前沒有學生投票資料</td>
                     </tr>
-                {% endfor %}
+                {% endif %}
             </tbody>
         </table>
 
         <h2>各組投票統計</h2>
-        <!-- 顯示每組的投票總數 -->
         <table>
             <thead>
                 <tr>
@@ -52,20 +61,26 @@
                 </tr>
             </thead>
             <tbody>
-                {% for vote in vote_counts %}
+                {% if vote_counts_data %}
+                    {% for vote in vote_counts_data %}
+                        <tr>
+                            <td>{{ vote.group_id }}</td>
+                            <td>{{ vote.group_name }}</td>
+                            <td>{{ vote.vote_count }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
                     <tr>
-                        <td>{{ vote.group_id }}</td>
-                        <td>{{ vote.group_name }}</td>
-                        <td>{{ vote.vote_count }}</td>
+                        <td colspan="3" style="text-align: center;">目前沒有投票統計資料</td>
                     </tr>
-                {% endfor %}
+                {% endif %}
             </tbody>
         </table>
 
-        <!-- 下載按鈕 -->
         <div class="download-buttons">
             <button id="downloadExcelBtn">下載各組投票紀錄</button>
             <button id="download_student_votes">下載投票學生紀錄（Excel）</button>
+            <button onclick="window.location.href='{{ url_for('admin_feedbacks') }}'">查看回饋管理</button>
         </div>
     </div>
 

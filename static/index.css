@@ -1,63 +1,77 @@
-/* Reset some default styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #6e7bff, #74d1e3);
+  background-color: #6e7bff;
+  background-image: linear-gradient(135deg, #6e7bff, #74d1e3);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  margin: 0;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .container {
   background-color: #fff;
-  padding: 40px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   max-width: 420px;
   width: 100%;
   text-align: center;
-  animation: slideIn 1s ease-out forwards;
+  animation: slideIn 0.8s ease-out forwards;
+  -webkit-animation: slideIn 0.8s ease-out forwards;
   transform: translateY(0);
 }
 
 h1 {
-  font-size: 2rem;
-  margin-bottom: 25px;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
   color: #333;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
-  animation: fadeInText 1.2s ease-out forwards;
+  animation: fadeInText 1s ease-out forwards;
+  -webkit-animation: fadeInText 1s ease-out forwards;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 3px;
 }
 
 label {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #555;
   text-align: left;
   font-weight: 500;
 }
 
 input[type="text"] {
-  padding: 12px;
+  padding: 10px;
   border: 2px solid #ddd;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   background-color: #f9f9f9;
-  transition: all 0.4s ease;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
   color: #333;
 }
 
@@ -68,21 +82,21 @@ input[type="text"]:focus {
 }
 
 button {
-  padding: 14px 22px;
+  padding: 8px 14px;
   background-color: #6e7bff;
   color: white;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
   background-color: #5a6ae6;
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
 button:active {
@@ -90,10 +104,11 @@ button:active {
 }
 
 p {
-  margin-top: 15px;
-  font-size: 0.9rem;
+  margin-top: 6px;
+  font-size: 0.85rem;
   color: red;
   animation: fadeInText 1s ease-out forwards;
+  -webkit-animation: fadeInText 1s ease-out forwards;
 }
 
 @keyframes slideIn {
@@ -104,6 +119,17 @@ p {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes slideIn {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
   }
 }
 
@@ -118,36 +144,47 @@ p {
   }
 }
 
+@-webkit-keyframes fadeInText {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+
 /* 手機自適應設計 */
 @media (max-width: 480px) {
   .container {
-    padding: 25px;
+    padding: 12px;
     border-radius: 10px;
     max-width: 90%;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 20px;
   }
 
   label {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   input[type="text"] {
     padding: 10px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   button {
-    padding: 12px 18px;
-    font-size: 1rem;
+    padding: 7px 12px;
+    font-size: 0.9rem;
     border-radius: 40px;
   }
 
   p {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 }

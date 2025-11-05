@@ -1,4 +1,3 @@
-/* 全局設置 */
 * {
   margin: 0;
   padding: 0;
@@ -17,8 +16,6 @@ body {
   overflow-x: hidden;
   position: relative;
 }
-
-/* 容器 */
 .container {
   max-width: 1400px;
   width: 92%;
@@ -26,7 +23,6 @@ body {
   animation: fadeIn 1s ease-in-out;
 }
 
-/* 標題 */
 h1 {
   text-align: center;
   font-size: 2.8rem;
@@ -47,7 +43,6 @@ p {
   letter-spacing: 1.5px;
 }
 
-/* 投票佈局 */
 .voting-layout {
   display: flex;
   flex-direction: row;
@@ -56,9 +51,8 @@ p {
   min-height: 700px;
 }
 
-/* 按鈕面板 */
 .button-panel {
-  flex: 1; /* 佔據全部可用空間 */
+  flex: 1;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 24px;
@@ -68,14 +62,12 @@ p {
   overflow: hidden;
 }
 
-/* 按鈕網格 */
 .button-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 1.5rem;
 }
 
-/* 顯示詳情按鈕 */
 .show-details-btn {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.85));
   color: #ffffff;
@@ -109,7 +101,6 @@ p {
   transform: scale(1.05);
 }
 
-/* 投票按鈕 */
 .vote-btn {
   background: linear-gradient(135deg, #facc15, #f97316);
   color: #ffffff;
@@ -137,13 +128,11 @@ p {
   transform: scale(0.95);
 }
 
-/* 按鈕反白效果 */
 .vote-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-/* 確認按鈕 */
 #confirmButton {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #ffffff;
@@ -151,7 +140,7 @@ p {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 4rem auto; /* 移除負邊距，確保按鈕在下方 */
+  margin: 4rem auto;
   cursor: pointer;
   border: none;
   border-radius: 14px;
@@ -181,13 +170,11 @@ p {
   transform: none;
 }
 
-/* 動畫 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* 響應式設計 */
 @media (max-width: 768px) {
   h1 { font-size: 2.5rem; }
   .container { width: 95%; padding: 1.5rem; }

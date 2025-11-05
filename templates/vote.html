@@ -10,8 +10,8 @@
 <body>
   <div class="container">
     <h1>專題投票系統</h1>
-    <p>投出你心目中的前三名，讓他們獲得最佳人氣獎</p>
-    <p>請投票三個組別，確認後按下確認送出</p>
+    <p>投出你心目中的前三名</p>
+    <p>確認選擇三組後按下確認送出</p>
     <div class="voting-layout">
       <div class="button-panel">
         <div class="button-grid">
@@ -32,6 +32,22 @@
 
   <script>
     const userVotes = {{ session.get("votes", []) | tojson }};
+  window.addEventListener("beforeunload", function (event) {
+    event.preventDefault();
+    event.returnValue = '';
+  });
+
+  const userVotes = {{ session.get("votes", []) | tojson }};
+  const hasVoted = {{ 1 if session.get("votes") and len(session["votes"]) == 3 else 0 }};
+
+  if (hasVoted) {
+    window.location.href = "{{ url_for('succeed') }}";
+  }
+
+  history.pushState(null, null, location.href);
+  window.addEventListener("popstate", function () {
+    history.pushState(null, null, location.href);
+  });
   </script>
   <script src="{{ url_for('static', filename='js/vote.js') }}"></script>
 </body>

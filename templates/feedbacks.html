@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>填寫意見回饋</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='feedbacks.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>請填寫您的意見回饋</h1>
+
+    <label for="group_id">選擇組別：</label>
+    <select id="group_id">
+      {% for group in groups %}
+        <option value="{{ group.id }}">{{ group.lab_number }} - {{ group.name }}</option>
+      {% endfor %}
+    </select><br><br>
+
+    <label for="feedback_date">選擇日期：</label>
+    <input type="text" id="feedback_date" name="feedback_date" placeholder="選擇日期"><br><br>
+
+    <label for="feedback_time">選擇時間：</label>
+    <input type="text" id="feedback_time" name="feedback_time" placeholder="選擇時間"><br><br>
+
+    <textarea id="feedback_text" rows="6" cols="40" placeholder="請輸入您的建議..."></textarea><br>
+    <button type="button" id="add_feedback_btn">新增回饋</button>
+    <button type="button" id="skip_feedback_btn">跳過回饋</button>
+
+    <div class="feedback-list" id="feedback_list"></div>
+
+    <form id="submit_form" method="POST" action="/api/feedback/batch" style="display: none;">
+      <input type="hidden" name="data" id="feedback_data">
+      <button type="submit">確認送出全部回饋</button>
+    </form>
+  </div>
+
+  <script>
+    const groupMap = {
+      {% for group in groups %}
+        "{{ group.id }}": "{{ group.name }}",
+      {% endfor %}
+    };
+
+    flatpickr("#feedback_date", {
+      dateFormat: "Y-m-d",
+      maxDate: "today",
+      locale: "zh_TW",
+    });
+
+    flatpickr("#feedback_time", {
+      enableTime: true,
+      noCalendar: true,
+      dateFormat: "H:i",
+      time_24hr: true,
+    });
+  </script>
+  <script src="/static/js/feedbacks.js"></script>
+</body>
+</html>

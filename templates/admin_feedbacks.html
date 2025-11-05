@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理回饋</title>
+    <script src="../static/js/adminfeedbacks.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminfeedbacks.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>回饋內容管理</h1>
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <table id="feedback_table">
+            <thead>
+                <tr>
+                    <th>學號</th>
+                    <th>姓名</th>
+                    <th>回饋組別</th>
+                    <th>回饋日期</th>
+                    <th>回饋時間</th>
+                    <th>回饋內容</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedbacks %}
+                    <tr>
+                        <td>{{ feedback.studentId }}</td>
+                        <td>{{ feedback.studentName }}</td>
+                        <td>{{ feedback.group_name }}</td>
+                        <td>{{ feedback.feedback_date | default('N/A') }}</td>
+                        <td>{{ feedback.feedback_time | default('N/A') }}</td>
+                        <td>{{ feedback.feedback }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button onclick="window.location.href='{{ url_for('admin') }}'">查看投票管理</button>
+    </div>
+</body>
+</html>

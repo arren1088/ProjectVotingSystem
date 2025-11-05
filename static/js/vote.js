@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // 點擊按鈕，選擇或取消選擇組別
   buttonPanel.addEventListener('click', function (e) {
     const button = e.target.closest('.show-details-btn');
     if (button) {
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const index = selectedGroups.indexOf(groupId);
       if (index !== -1) {
-        // 取消選取
         selectedGroups.splice(index, 1);
         button.classList.remove("voted");
         button.innerHTML = `${button.getAttribute('data-lab-number')}<br>${groupId} <br> ${button.getAttribute('data-group-name')}`;
@@ -38,24 +36,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 更新「確認送出」按鈕的啟用狀態
   function updateConfirmButton() {
     confirmBtn.disabled = selectedGroups.length !== 3;
   }
 
-  // 按下確認送出
   if (confirmBtn) {
     updateConfirmButton();
 
     confirmBtn.addEventListener("click", function (e) {
-      e.preventDefault();  // 阻止表單的預設提交行為
+      e.preventDefault();
 
       if (selectedGroups.length !== 3) {
         alert("您必須選擇三個組別！");
         return;
       }
 
-      // 發送 POST 請求到 /api/vote/confirm
       fetch("/api/vote/confirm", {
         method: "POST",
         headers: {
@@ -65,9 +60,9 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then(response => response.json())
         .then(data => {
-          if (data.success) {
-            window.location.href = "/succeed"; // 投票成功後跳轉
-          } else {
+         if (data.success) {
+              window.location.href = "/feedbacks";
+          }else {
             alert(data.message || "確認投票失敗！");
           }
         })
