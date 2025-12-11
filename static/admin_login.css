@@ -1,5 +1,3 @@
-/* ==== 深色科技風 Admin 登入頁 (響應式強化版) ==== */
-
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +18,6 @@ body {
   padding: 20px;
 }
 
-/* 半透明登入框 */
 form {
   background: rgba(15, 20, 40, 0.85);
   padding: 45px 60px;
@@ -36,7 +33,6 @@ form {
   width: 100%;
 }
 
-/* 標題 */
 h2 {
   color: #dfe4ff;
   font-size: 1.8rem;
@@ -45,7 +41,6 @@ h2 {
   text-shadow: 0 0 10px rgba(0, 140, 255, 0.6);
 }
 
-/* 輸入框 */
 input[type="password"] {
   width: 100%;
   max-width: 260px;
@@ -66,7 +61,6 @@ input[type="password"]:focus {
   box-shadow: 0 0 12px #0af;
 }
 
-/* 登入按鈕 */
 button {
   width: 150px;
   padding: 12px;
@@ -83,8 +77,6 @@ button {
   overflow: hidden;
   font-size: 1rem;
 }
-
-/* 流光動畫 */
 button::before {
   content: '';
   position: absolute;
@@ -101,16 +93,12 @@ button:hover {
   box-shadow: 0 0 25px rgba(0, 200, 255, 0.8);
 }
 
-/* 錯誤訊息 */
 p {
   color: #ff4f6f;
   margin-bottom: 15px;
   font-size: 0.95rem;
 }
 
-/* === 響應式調整 === */
-
-/* 平板以下 (<=768px) */
 @media (max-width: 768px) {
   form {
     padding: 35px 40px;
@@ -129,7 +117,6 @@ p {
   }
 }
 
-/* 手機 (<=480px) */
 @media (max-width: 480px) {
   body {
     padding: 10px;
@@ -159,7 +146,6 @@ p {
   }
 }
 
-/* 小螢幕或橫向手機 (<=360px) */
 @media (max-width: 360px) {
   h2 {
     font-size: 1.2rem;
@@ -174,7 +160,6 @@ p {
   }
 }
 
-/* 動畫效果 */
 @keyframes shine {
   0% { left: -75%; }
   100% { left: 125%; }

@@ -1,5 +1,3 @@
-/* ----- 放置路徑建議：/assets/css/styles.css （或你的主要 stylesheet） ----- */
-
 * {
   margin: 0;
   padding: 0;
@@ -7,19 +5,17 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ==== 基本佈局（不要把整個 body 設為垂直置中，交給 .wrapper） ==== */
 html, body {
   height: 100%;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: auto; /* 允許滾動，避免內容被截 */
+  overflow-y: auto;
   background: #1a1f2e;
   position: relative;
 }
 
-/* 電腦：高質感漸層背景（支援 backdrop-filter 的瀏覽器） */
 @supports (backdrop-filter: blur(16px)) {
   body {
     background: linear-gradient(135deg, #1a1f2e 0%, #2a2a40 50%, #1e2233 100%);
@@ -28,7 +24,6 @@ html, body {
     animation: gradientShift 8s ease-in-out infinite;
   }
 }
-/* 針對 -webkit 前綴的額外支援（Safari 與部分 WebKit） */
 @supports (-webkit-backdrop-filter: blur(16px)) {
   body {
     background: linear-gradient(135deg, #1a1f2e 0%, #2a2a40 50%, #1e2233 100%);
@@ -38,7 +33,6 @@ html, body {
   }
 }
 
-/* 手機：穩定純色背景 */
 @media (max-width: 768px) {
   body {
     background: #1e2333 !important;
@@ -46,7 +40,6 @@ html, body {
   }
 }
 
-/* 光點動畫（僅支援毛玻璃） - 同樣分開判斷以確保相容 */
 @supports (backdrop-filter: blur(16px)) {
   body::before {
     content: '';
@@ -86,11 +79,10 @@ html, body {
   50% { transform: translateY(-20px) rotate(1deg); }
 }
 
-/* ==== 包裝器：確保內容置中且能正確滾動 ==== */
 .wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 垂直置中主要內容（視窗高度不足會自然向上） */
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
   width: 100%;
@@ -99,7 +91,6 @@ html, body {
   box-sizing: border-box;
 }
 
-/* ==== 容器：毛玻璃卡片 ==== */
 .container {
   background: rgba(30, 35, 55, 0.4);
   border-radius: 24px;
@@ -116,7 +107,6 @@ html, body {
   will-change: transform, opacity;
 }
 
-/* 電腦：毛玻璃效果 */
 @supports (backdrop-filter: blur(16px)) {
   .container {
     backdrop-filter: blur(18px);
@@ -138,7 +128,6 @@ html, body {
   }
 }
 
-/* 手機：純色模擬質感 */
 @media (max-width: 768px) {
   .container {
     background: rgba(35, 40, 65, 0.75) !important;
@@ -149,7 +138,6 @@ html, body {
   }
 }
 
-/* 懸浮動畫（保留，但不要強制 override 導致動畫卡住） */
 .container:hover {
   transform: translateY(-8px);
   box-shadow:
@@ -165,7 +153,6 @@ html, body {
   }
 }
 
-/* ==== 標題：霓虹呼吸光 ==== */
 h1 {
   font-size: 2.8rem;
   font-weight: 800;
@@ -178,7 +165,7 @@ h1 {
   background-clip: text;
   background-size: 200% 200%;
   animation: neonGlow 3s ease-in-out infinite, fadeInText 1s ease-out forwards;
-  /* fadeInText 的延遲單獨控制在下面 */
+
   animation-delay: 0s, 0.6s;
   text-shadow:
     0 0 10px rgba(160, 196, 255, 0.6),
@@ -191,7 +178,6 @@ h1 {
   50% { background-position: 100% 50%; }
 }
 
-/* ==== 內文 ==== */
 p {
   font-size: 1.25rem;
   color: #b0c4ff;
@@ -207,7 +193,6 @@ p {
   to { opacity: 1; }
 }
 
-/* ==== 頁腳 ==== */
 .footer {
   margin-top: 2.5rem;
   font-size: 0.875rem;
@@ -217,7 +202,6 @@ p {
   animation-delay: 1.2s;
 }
 
-/* ==== 響應式 ==== */
 @media (max-width: 768px) {
   .wrapper { padding: 1.5rem; }
   h1 { font-size: 2.3rem; }

@@ -27,7 +27,6 @@ body {
   position: relative;
 }
 
-/* 深色背景光點 */
 body::before {
   content: '';
   position: absolute;
@@ -41,7 +40,6 @@ body::before {
   animation: float 18s ease-in-out infinite;
 }
 
-/* 深色毛玻璃容器 */
 .container {
   background: rgba(20, 20, 40, 0.4);
   backdrop-filter: blur(16px);
@@ -182,7 +180,6 @@ input[type="text"]::placeholder {
   font-style: italic;
 }
 
-/* 動畫 */
 @keyframes slideIn {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -196,7 +193,6 @@ input[type="text"]::placeholder {
   50% { transform: translateY(-15px) rotate(0.5deg); }
 }
 
-/* 手機適配 */
 @media (max-width: 480px) {
   .container {
     padding: 24px 20px;

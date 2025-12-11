@@ -11,10 +11,9 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  background: #1a1f2e; /* 手機 fallback 純色 */
+  background: #1a1f2e;
 }
 
-/* ==== 電腦：高質感漸層 + 毛玻璃 ==== */
 @supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
   body {
     background: linear-gradient(135deg, #1a1f2e 0%, #2a2a40 50%, #1e2233 100%);
@@ -22,14 +21,12 @@ html, body {
   }
 }
 
-/* 手機：強制純色背景，避免渲染 bug */
 @media (max-width: 768px) {
   body {
     background: #1e2333 !important;
   }
 }
 
-/* 光點動畫（僅電腦 + 高階手機） */
 @supports (backdrop-filter: blur(16px)) {
   body::before {
     content: '';
@@ -55,7 +52,6 @@ body {
   color: #e8ecf9;
 }
 
-/* ==== 容器：毛玻璃安全版 ==== */
 .container {
   max-width: 1400px;
   width: 92%;
@@ -66,7 +62,6 @@ body {
   z-index: 1;
 }
 
-/* 電腦：啟用毛玻璃 */
 @supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
   .container {
     background: rgba(30, 35, 55, 0.35);
@@ -79,7 +74,6 @@ body {
   }
 }
 
-/* 手機：用純色 + 邊框模擬質感 */
 @media (max-width: 768px) {
   .container {
     background: rgba(35, 40, 60, 0.7) !important;
@@ -88,7 +82,6 @@ body {
   }
 }
 
-/* ==== 文字 ==== */
 h1, p {
   text-align: center;
   font-weight: 700;
@@ -111,7 +104,6 @@ p {
   color: #c0c8ff;
 }
 
-/* ==== 其餘樣式（不變）==== */
 .voting-layout {
   display: flex;
   flex-direction: row;
@@ -131,7 +123,6 @@ p {
   z-index: 2;
 }
 
-/* 電腦毛玻璃 */
 @supports (backdrop-filter: blur(16px)) {
   .button-panel {
     background: rgba(35, 40, 65, 0.5);
@@ -142,7 +133,6 @@ p {
   }
 }
 
-/* 手機純色 */
 @media (max-width: 768px) {
   .button-panel {
     background: rgba(40, 45, 70, 0.8) !important;
@@ -157,7 +147,6 @@ p {
   padding: 0.5rem;
 }
 
-/* 按鈕樣式（保持不變） */
 .show-details-btn {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(96, 165, 250, 0.9));
   color: #ffffff;
@@ -195,7 +184,6 @@ p {
   transform: scale(1.05);
 }
 
-/* 確認按鈕（保持） */
 #confirmButton {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
@@ -228,7 +216,6 @@ p {
 #confirmButton:active { transform: scale(0.95); }
 #confirmButton:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* 動畫 */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -239,7 +226,6 @@ p {
   50% { transform: translateY(-20px) rotate(1deg); }
 }
 
-/* ==== 響應式 ==== */
 @media (max-width: 1200px) { .button-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 900px) {
   .button-grid { grid-template-columns: repeat(3, 1fr); }

@@ -14,7 +14,6 @@ html, body {
   background: #1a1f2e;
 }
 
-/* 電腦：高質感漸層背景 */
 @supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
   body {
     background: linear-gradient(135deg, #1a1f2e 0%, #2a2a40 50%, #1e2233 100%);
@@ -22,14 +21,12 @@ html, body {
   }
 }
 
-/* 手機：穩定純色背景 */
 @media (max-width: 768px) {
   body {
     background: #1e2333 !important;
   }
 }
 
-/* 光點動畫（僅支援毛玻璃的設備） */
 @supports (backdrop-filter: blur(16px)) {
   body::before {
     content: '';
@@ -54,7 +51,6 @@ body {
   color: #e0e6ff;
 }
 
-/* 容器：毛玻璃卡片 */
 .container {
   max-width: 460px;
   width: 92%;
@@ -65,7 +61,6 @@ body {
   animation: slideIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* 電腦：毛玻璃 */
 @supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
   .container {
     background: rgba(30, 35, 55, 0.4);
@@ -78,7 +73,6 @@ body {
   }
 }
 
-/* 手機：純色模擬質感 */
 @media (max-width: 768px) {
   .container {
     background: rgba(35, 40, 65, 0.75) !important;
@@ -112,14 +106,12 @@ p {
   font-weight: 500;
 }
 
-/* 表單 */
 form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-/* 輸入框 & 文字區 */
 input[type="text"],
 select,
 textarea {
@@ -159,7 +151,6 @@ textarea {
   resize: vertical;
 }
 
-/* 下拉選單 */
 .select-wrapper {
   position: relative;
 }
@@ -181,7 +172,6 @@ select {
   padding-right: 2.5rem;
 }
 
-/* 按鈕通用樣式 */
 button {
   padding: 1rem 1.5rem;
   border: none;
@@ -219,7 +209,6 @@ button:active {
   transform: translateY(-1px);
 }
 
-/* 主要按鈕 */
 button[type="submit"],
 #add_feedback_btn {
   background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -232,7 +221,6 @@ button[type="submit"]:hover,
   box-shadow: 0 12px 30px rgba(34, 197, 94, 0.5);
 }
 
-/* 跳過按鈕 */
 #skip_feedback_btn {
   background: linear-gradient(135deg, #ef4444, #dc2626);
 }
@@ -242,7 +230,6 @@ button[type="submit"]:hover,
   box-shadow: 0 12px 30px rgba(239, 68, 68, 0.5);
 }
 
-/* 送出表單按鈕 */
 form#submit_form button {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   font-size: 1.1rem;
@@ -302,7 +289,6 @@ form#submit_form button:hover {
   box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
 }
 
-/* 顯示控制 */
 #submit_form {
   display: none;
   margin-top: 2rem;
@@ -324,9 +310,6 @@ form#submit_form button:hover {
   50% { transform: translateY(-15px) rotate(0.5deg); }
 }
 
-
-
-/* 手機響應式 */
 @media (max-width: 480px) {
   .container {
     padding: 1.5rem;
