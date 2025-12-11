@@ -456,7 +456,7 @@ def batch_feedback():
 
     return jsonify({"success": True})
 
-ADMIN_PASSWORD = "12345"
+ADMIN_PASSWORD = "pucsim1114"
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
@@ -556,35 +556,46 @@ def download_votes():
 
 @app.route("/admin/download_student_votes")
 def download_student_votes():
-    groups = load_groups()
+    groups = load_groups()  # groups.json 的資料
+
     try:
         with sqlite3.connect(DB_PATH) as conn:
             c = conn.cursor()
-            c.execute("SELECT student_id, student_name, student_class FROM students")
-            students_raw = c.fetchall()
 
-            student_votes = []
-            for student_id, name, student_class in students_raw:
-                c.execute("SELECT group_id, vote_time FROM votes WHERE student_id = ?", (student_id,))
-                group_votes = [{"group_id": row[0], "vote_time": row[1]} for row in c.fetchall()]
-                vote_details = "; ".join([f"{g['group_id']} ({next((group['name'] for group in groups if group['id'] == g['group_id']), '未知組別')}) at {g['vote_time']}" for g in group_votes]) or "無投票"
-                student_votes.append({
-                    "student_id": student_id,
-                    "student_name": name,
-                    "student_class": student_class or "未知班級",
-                    "votes": vote_details
+            # 取得 votes 表所有 group_id
+            c.execute("SELECT group_id FROM votes")
+            all_votes = [row[0] for row in c.fetchall()]
+
+            # 各組票數統計
+            group_stats = []
+            for g in groups:
+                group_id = g["id"]
+                group_name = g["name"]
+
+                vote_count = all_votes.count(group_id)
+
+                group_stats.append({
+                    "group_id": group_id,
+                    "group_name": group_name,
+                    "vote_count": vote_count
                 })
-    except sqlite3.Error as e:
-        logging.error(f"Error downloading student votes: {e}")
-        return jsonify({"success": False, "message": "無法下載學生投票資料"}), 500
 
-    df = pd.DataFrame(student_votes)
+    except sqlite3.Error as e:
+        logging.error(f"Error downloading group vote stats: {e}")
+        return jsonify({"success": False, "message": "無法下載各組投票統計"}), 500
+
+    # 轉成 Excel
+    df = pd.DataFrame(group_stats)
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name="Student_Votes")
+        df.to_excel(writer, index=False, sheet_name="Group_Votes")
     output.seek(0)
-    return send_file(output, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                     as_attachment=True, download_name="學生投票紀錄.xlsx")
+
+    return send_file(output,
+                     mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                     as_attachment=True,
+                     download_name="各組投票統計.xlsx")
+
 
 @app.route("/admin/feedbacks")
 def admin_feedbacks():
@@ -669,5 +680,5 @@ def get_feedbacks():
 
     return jsonify({"success": True, "feedbacks": feedback_data})
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

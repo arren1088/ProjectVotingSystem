@@ -6,185 +6,211 @@
 
 html, body {
   height: 100%;
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #0f0f1a;
+  color: #e0e0ff;
 }
 
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #6e7bff;
-  background-image: linear-gradient(135deg, #6e7bff, #74d1e3);
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   background-attachment: fixed;
-  background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
   overflow-y: auto;
+  position: relative;
 }
 
+/* 深色背景光點 */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(80, 100, 200, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(100, 180, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(150, 150, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: float 18s ease-in-out infinite;
+}
+
+/* 深色毛玻璃容器 */
 .container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  max-width: 420px;
+  background: rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 36px 32px;
+  border-radius: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(100, 120, 255, 0.1) inset;
+  max-width: 440px;
   width: 100%;
   text-align: center;
-  animation: slideIn 0.8s ease-out forwards;
-  -webkit-animation: slideIn 0.8s ease-out forwards;
-  transform: translateY(0);
+  animation: slideIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(20px);
+  opacity: 0;
 }
 
 h1 {
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  animation: fadeInText 1s ease-out forwards;
-  -webkit-animation: fadeInText 1s ease-out forwards;
+  font-size: 1.75rem;
+  margin-bottom: 24px;
+  color: #e0e6ff;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  animation: fadeInText 1s ease-out 0.3s forwards;
+  opacity: 0;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 16px;
 }
 
 label {
-  font-size: 1rem;
-  color: #555;
+  font-size: 0.95rem;
+  color: rgba(220, 230, 255, 0.9);
   text-align: left;
   font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input-wrapper {
+  position: relative;
 }
 
 input[type="text"] {
-  padding: 10px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  background-color: #f9f9f9;
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
-  color: #333;
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: rgba(40, 40, 70, 0.5);
+  color: #e0e6ff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(100, 120, 255, 0.2) inset;
+}
+
+input[type="text"]::placeholder {
+  color: rgba(180, 190, 255, 0.6);
+  font-weight: 500;
 }
 
 input[type="text"]:focus {
-  border-color: #6e7bff;
-  box-shadow: 0 0 8px rgba(110, 123, 255, 0.6);
   outline: none;
+  background: rgba(50, 50, 90, 0.7);
+  box-shadow:
+    0 0 0 3px rgba(100, 150, 255, 0.4),
+    0 8px 25px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
 }
 
 button {
-  padding: 8px 14px;
-  background-color: #6e7bff;
+  margin-top: 8px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:
+    0 6px 20px rgba(102, 126, 234, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shine 2.5s infinite;
 }
 
 button:hover {
-  background-color: #5a6ae6;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 30px rgba(102, 126, 234, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+button:hover::before {
+  left: 100%;
 }
 
 button:active {
-  transform: translateY(1px);
+  transform: translateY(-1px);
 }
 
-p {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  color: red;
-  animation: fadeInText 1s ease-out forwards;
-  -webkit-animation: fadeInText 1s ease-out forwards;
+p.error {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  color: #ff6b6b;
+  font-weight: 500;
+  animation: fadeInText 0.8s ease-out forwards;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  opacity: 0;
 }
 
+input[type="text"]::placeholder {
+  color: rgba(180, 190, 255, 0.6);
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* 動畫 */
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@-webkit-keyframes slideIn {
-  from {
-    opacity: 0;
-    -webkit-transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInText {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@-webkit-keyframes fadeInText {
-  from {
-    opacity: 0;
-    -webkit-transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(0.5deg); }
 }
 
-/* 手機自適應設計 */
+/* 手機適配 */
 @media (max-width: 480px) {
   .container {
-    padding: 12px;
-    border-radius: 10px;
-    max-width: 90%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 24px 20px;
+    margin: 16px;
+    border-radius: 18px;
   }
+  h1 { font-size: 1.5rem; }
+  input[type="text"] { padding: 13px 15px; font-size: 0.95rem; }
+  button { padding: 13px 18px; font-size: 0.95rem; }
+  label { font-size: 0.9rem; }
+  p.error { font-size: 0.8rem; }
+}
 
-  h1 {
-    font-size: 1.4rem;
-    margin-bottom: 20px;
-  }
-
-  label {
-    font-size: 0.95rem;
-  }
-
-  input[type="text"] {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-
-  button {
-    padding: 7px 12px;
-    font-size: 0.9rem;
-    border-radius: 40px;
-  }
-
-  p {
-    font-size: 0.8rem;
-  }
+@keyframes shine {
+  0% { left: -75%; }
+  100% { left: 125%; }
 }

@@ -3,34 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#6e7bff">
-  <title>投票系統 - 登入</title>
+  <meta name="theme-color" content="#667eea">
+  <title>專題投票反應系統 - 登入</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
   <div class="container">
     <h1>專題投票反應系統</h1>
-<form id="user-form" action="/submit" method="POST">
-  <label for="student_id">學號（例：411211383）：</label>
-  <input type="text" id="student_id" name="student_id" required><br><br>
 
-  <label for="student_class">班級（例：資管三A）：</label>
-  <input type="text" id="student_class" name="student_class" required><br><br>
+    <form id="user-form" action="/submit" method="POST">
 
-  <label for="student_name">姓名（例：陳曉明）：</label>
-  <input type="text" id="student_name" name="student_name" required><br><br>
+      <label for="student_id">學號</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="student_id"
+          name="student_id"
+          placeholder="例：411211383"
+          required
+          autocomplete="off"
+          aria-label="學號">
+      </div>
 
-  <button type="submit">開始投票</button>
-  {% if message %}
-    <p style="color: red;">{{ message }}</p>
-  {% endif %}
-          {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        {% if request.args.get('message') %}
-            <p style="color: red;">{{ request.args.get('message') }}</p>
-        {% endif %}
-</form>
+      <label for="student_class">班級</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="student_class"
+          name="student_class"
+          placeholder="例：資管三B"
+          required
+          autocomplete="off"
+          aria-label="班級">
+      </div>
+
+      <label for="student_name">姓名</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="student_name"
+          name="student_name"
+          placeholder="例：陳恩儒"
+          required
+          autocomplete="off"
+          aria-label="姓名">
+      </div>
+
+      <button type="submit">開始投票</button>
+
+      <!-- 統一錯誤訊息顯示 -->
+      {% if message %}
+        <p class="error">{{ message }}</p>
+      {% endif %}
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+      {% if request.args.get('message') %}
+        <p class="error">{{ request.args.get('message') }}</p>
+      {% endif %}
+
+    </form>
   </div>
 </body>
 </html>

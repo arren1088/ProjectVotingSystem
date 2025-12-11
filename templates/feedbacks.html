@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='feedbacks.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>請填寫您的意見回饋</h1>
-
+    <h1>申訴組別</h1>
+    <p>如無需申訴，請按下跳過回饋</p>
     <label for="group_id">選擇組別：</label>
     <select id="group_id">
       {% for group in groups %}
@@ -26,9 +27,11 @@
     <input type="text" id="feedback_time" name="feedback_time" placeholder="選擇時間"><br><br>
 
     <textarea id="feedback_text" rows="6" cols="40" placeholder="請輸入您的建議..."></textarea><br>
-    <button type="button" id="add_feedback_btn">新增回饋</button>
-    <button type="button" id="skip_feedback_btn">跳過回饋</button>
 
+<div class="btn-group">
+  <button type="button" id="add_feedback_btn">新增回饋</button>
+  <button type="button" id="skip_feedback_btn">跳過回饋</button>
+</div>
     <div class="feedback-list" id="feedback_list"></div>
 
     <form id="submit_form" method="POST" action="/api/feedback/batch" style="display: none;">

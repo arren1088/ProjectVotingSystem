@@ -4,218 +4,260 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: #1a1f2e; /* 手機 fallback 純色 */
+}
+
+/* ==== 電腦：高質感漸層 + 毛玻璃 ==== */
+@supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
+  body {
+    background: linear-gradient(135deg, #1a1f2e 0%, #2a2a40 50%, #1e2233 100%);
+    background-attachment: fixed;
+  }
+}
+
+/* 手機：強制純色背景，避免渲染 bug */
+@media (max-width: 768px) {
+  body {
+    background: #1e2333 !important;
+  }
+}
+
+/* 光點動畫（僅電腦 + 高階手機） */
+@supports (backdrop-filter: blur(16px)) {
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(circle at 15% 70%, rgba(100, 140, 255, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 85% 30%, rgba(140, 100, 255, 0.14) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(180, 200, 255, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    animation: float 28s ease-in-out infinite;
+  }
+}
+
 body {
-  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #fdfcfa;
-  color: #ffffff;
-  line-height: 1.6;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  overflow-x: hidden;
   position: relative;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  color: #e8ecf9;
 }
+
+/* ==== 容器：毛玻璃安全版 ==== */
 .container {
   max-width: 1400px;
   width: 92%;
   padding: 2.5rem;
-  animation: fadeIn 1s ease-in-out;
+  animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 電腦：啟用毛玻璃 */
+@supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
+  .container {
+    background: rgba(30, 35, 55, 0.35);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(120, 150, 255, 0.25);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(120, 150, 255, 0.15) inset;
+  }
+}
+
+/* 手機：用純色 + 邊框模擬質感 */
+@media (max-width: 768px) {
+  .container {
+    background: rgba(35, 40, 60, 0.7) !important;
+    border: 1px solid rgba(100, 140, 255, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+/* ==== 文字 ==== */
+h1, p {
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin: 1.5rem 0;
+  z-index: 2;
 }
 
 h1 {
-  text-align: center;
   font-size: 2.8rem;
-  font-weight: 700;
-  color: #1A1A2E;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  margin: 2rem 0;
-  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #a8b8ff, #d0d8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 p {
-  text-align: center;
   font-size: 1.4rem;
-  font-weight: 700;
-  color: #1A1A2E;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  margin: 2rem 0;
-  letter-spacing: 1.5px;
+  color: #c0c8ff;
 }
 
+/* ==== 其餘樣式（不變）==== */
 .voting-layout {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  gap: 2rem;
   width: 100%;
   min-height: 700px;
+  z-index: 2;
 }
 
 .button-panel {
   flex: 1;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
   border-radius: 24px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+/* 電腦毛玻璃 */
+@supports (backdrop-filter: blur(16px)) {
+  .button-panel {
+    background: rgba(35, 40, 65, 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(120, 150, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* 手機純色 */
+@media (max-width: 768px) {
+  .button-panel {
+    background: rgba(40, 45, 70, 0.8) !important;
+    border: 1px solid rgba(100, 140, 255, 0.3) !important;
+  }
 }
 
 .button-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 1.5rem;
+  padding: 0.5rem;
 }
 
+/* 按鈕樣式（保持不變） */
 .show-details-btn {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.85));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(96, 165, 250, 0.9));
   color: #ffffff;
   border: none;
-  padding: 1.2rem 1.8rem;
+  padding: 1.3rem 1rem;
   border-radius: 16px;
   cursor: pointer;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  transition: all 0.3s ease;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.show-details-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.7s;
 }
 
 .show-details-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.5);
 }
 
-.show-details-btn:active {
-  transform: scale(0.95);
-}
-
+.show-details-btn:hover::before { left: 100%; }
+.show-details-btn:active { transform: scale(0.96); }
 .show-details-btn.active {
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.7);
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.7);
   transform: scale(1.05);
 }
 
-.vote-btn {
-  background: linear-gradient(135deg, #facc15, #f97316);
-  color: #ffffff;
-  border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 14px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  min-width: 160px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  margin: 1rem auto;
-}
-
-.vote-btn:hover {
-  background: linear-gradient(135deg, #eab308, #ea580c);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(250, 204, 21, 0.5);
-}
-
-.vote-btn:active {
-  transform: scale(0.95);
-}
-
-.vote-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
+/* 確認按鈕（保持） */
 #confirmButton {
   background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #ffffff;
-  padding: 1rem 2.5rem;
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 4rem auto;
+  color: white;
+  padding: 1.1rem 3rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 3rem auto;
   cursor: pointer;
   border: none;
-  border-radius: 14px;
+  border-radius: 50px;
   display: block;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  animation: fadeIn 1s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
 }
 
-#confirmButton:hover {
-  background: linear-gradient(135deg, #16a34a, #15803d);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
+#confirmButton::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.6s;
 }
 
-#confirmButton:active {
-  transform: scale(0.95);
-}
+#confirmButton:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(34, 197, 94, 0.6); }
+#confirmButton:hover::before { left: 100%; }
+#confirmButton:active { transform: scale(0.95); }
+#confirmButton:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; box-shadow: none; }
 
-#confirmButton:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
-
+/* 動畫 */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+/* ==== 響應式 ==== */
+@media (max-width: 1200px) { .button-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 900px) {
+  .button-grid { grid-template-columns: repeat(3, 1fr); }
+  .voting-layout { flex-direction: column; }
+  .button-panel { width: 100%; }
+}
 @media (max-width: 768px) {
-  h1 { font-size: 2.5rem; }
-  .container { width: 95%; padding: 1.5rem; }
-  .voting-layout {
-    flex-direction: column;
-    min-height: auto;
-  }
-  .button-panel {
-    flex: 1;
-    width: 100%;
-    padding: 1.5rem;
-  }
-  .button-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  .show-details-btn {
-    padding: 0.8rem 1.2rem;
-    font-size: 1.1rem;
-  }
-  .vote-btn {
-    min-width: 140px;
-    padding: 0.8rem 2rem;
-    font-size: 1.1rem;
-  }
+  h1 { font-size: 2.3rem; }
+  p { font-size: 1.2rem; }
+  .container, .button-panel { padding: 1.5rem; }
+  .button-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .show-details-btn { padding: 1rem; font-size: 1.1rem; }
 }
-
 @media (max-width: 480px) {
-  h1 { font-size: 2rem; }
+  h1 { font-size: 1.9rem; }
+  p { font-size: 1.1rem; }
   .container { padding: 1rem; }
-  .button-grid {
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
-  }
-  .show-details-btn {
-    padding: 0.7rem 1rem;
-    font-size: 1rem;
-  }
-  .vote-btn {
-    min-width: 120px;
-    padding: 0.7rem 1.5rem;
-    font-size: 1rem;
-  }
+  .button-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+  .show-details-btn { padding: 0.9rem; font-size: 1rem; }
+  #confirmButton { min-width: 140px; padding: 0.9rem 1.8rem; font-size: 1.1rem; }
 }
